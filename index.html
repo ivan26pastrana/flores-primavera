@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para vos en esta Primavera 💛🌻</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Tone.js for optional sweet spring sound ambient -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        springYellow: '#FCD34D',
+                        warmAmber: '#F59E0B',
+                        roseGold: '#FDA4AF',
+                        deepCream: '#FEF3C7',
+                        romanticRed: '#E11D48'
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        handwriting: ['Caveat', 'cursive'],
+                        calligraphy: ['Great Vibes', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Keyframe Animations */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.8); }
+        }
+        .glow-btn {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .parchment {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+            box-shadow: inset 0 0 40px rgba(217, 119, 6, 0.15), 0 20px 30px -10px rgba(0,0,0,0.15);
+        }
+        /* Custom Scrollbar for Letter */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(253, 230, 138, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #F59E0B;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 via-amber-100/50 to-orange-100 min-h-screen text-slate-800 font-sans relative overflow-x-hidden flex flex-col justify-between">
+
+    <canvas id="bgCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <header class="relative z-10 pt-8 pb-4 text-center px-4">
+        <span class="inline-block px-4 py-1.5 rounded-full bg-amber-200/60 text-amber-900 text-xs sm:text-sm font-semibold tracking-wider uppercase mb-3 shadow-sm border border-amber-300">
+            🌻 ¡Feliz  Primavera! 💛
+        </span>
+        <h1 class="font-calligraphy text-4xl sm:text-6xl md:text-7xl text-amber-700 drop-shadow-sm mb-2">
+            La primavera florece más bonita desde que estoy enamorado de vos.
+        </h1>
+        <p class="text-sm sm:text-base text-amber-800/80 max-w-md mx-auto font-medium">
+            Sos la mujer mas hermosa que vieron mis ojos.
+        </p>
+    </header>
+
+    <main class="relative z-10 container mx-auto px-4 py-4 flex-grow flex flex-col items-center justify-center max-w-4xl">
+        
+        <!-- Navigation Buttons Block -->
+        <div class="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 w-full max-w-lg">
+            <button id="btnFlowers" onclick="switchTab('flowers')" class="glow-btn flex-1 min-w-[200px] bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-amber-950 font-semibold px-6 py-4 rounded-2xl shadow-lg transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 flex items-center justify-center gap-3 group border border-amber-300">
+                <i data-lucide="flower-2" class="w-6 h-6 text-amber-900 group-hover:rotate-45 transition-transform duration-500"></i>
+                <span class="text-base sm:text-lg">Flores Amarillas</span>
+            </button>
+
+            <button id="btnLetter" onclick="switchTab('letter')" class="flex-1 min-w-[200px] bg-white/90 hover:bg-amber-50 text-amber-900 font-semibold px-6 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 flex items-center justify-center gap-3 group border border-amber-200">
+                <i data-lucide="mail-heart" class="w-6 h-6 text-rose-500 group-hover:scale-110 transition-transform"></i>
+                <span class="text-base sm:text-lg">Carta de Amor</span>
+            </button>
+        </div>
+
+        <!-- Dynamic Content Display Area -->
+        <div class="w-full relative min-h-[420px] flex items-center justify-center">
+
+            <section id="sectionFlowers" class="w-full flex flex-col items-center transition-all duration-700 transform opacity-100 scale-100">
+                <div class="glass-panel p-4 sm:p-6 rounded-3xl shadow-xl w-full max-w-lg flex flex-col items-center relative overflow-hidden">
+                    <div class="absolute top-3 left-4 flex items-center gap-2 text-amber-700/70 text-xs font-semibold">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> Ramo Interactivo
+                    </div>
+                    <button onclick="rebloomBouquet()" class="absolute top-3 right-4 text-xs bg-amber-200/70 hover:bg-amber-300/80 text-amber-900 px-3 py-1.5 rounded-full flex items-center gap-1 transition shadow-sm" title="Hacer florecer de nuevo">
+                        <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Re-florecer
+                    </button>
+
+                    <!-- Canvas for Blooming Bouquet -->
+                    <div class="relative w-full aspect-square max-w-[360px] my-2">
+                        <canvas id="flowerCanvas" class="w-full h-full rounded-2xl cursor-pointer" title="Haz clic en las flores para soltar destellos"></canvas>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-center text-amber-800/90 font-medium italic mt-1">
+                        ✨ Tocá el ramo jaja ✨
+                    </p>
+                </div>
+            </section>
+
+            <section id="sectionLetter" class="w-full hidden flex-col items-center transition-all duration-700 transform opacity-0 scale-95">
+                <div class="parchment p-6 sm:p-10 rounded-3xl w-full max-w-2xl relative border-2 border-amber-300/60 transition-all">
+                    
+                    <!-- Top Ribbon Decorative -->
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-rose-500 to-amber-500 text-white px-5 py-1 rounded-full text-xs font-bold shadow-md tracking-wider uppercase flex items-center gap-1">
+                        <i data-lucide="heart" class="w-3.5 h-3.5 fill-white"></i> Escrito con el corazón
+                    </div>
+
+                    <div class="flex justify-end gap-2 mb-2">
+                        <button onclick="toggleEditLetter()" id="editToggleBtn" class="text-xs bg-amber-200/60 hover:bg-amber-300 text-amber-900 px-3 py-1.5 rounded-full flex items-center gap-1 transition">
+                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Personalizar carta
+                        </button>
+                    </div>
+
+                    <!-- Display Mode Text -->
+                    <div id="letterViewMode" class="prose max-w-none">
+                        <p id="letterContentText" class="font-handwriting text-2xl sm:text-3xl text-amber-950 leading-relaxed sm:leading-loose whitespace-pre-line drop-shadow-sm">
+                           Estuve toda la mañana pensando que escribir, quería algo romántico, algo poético pero no me sale, solo te puedo decir que
+                           Te amo, te amo más de lo que imaginas, te amo de la forma más egoísta posible, quiero que tus besos sean solo para mí, 
+                           tus abrazos y tus risas, solo mio, no quiero que nadie más sepa lo que se siente ser amado por vos, quiero tu amor solo para mí por el resto de mí vida. 
+                        </p>
+                    </div>
+
+                    <!-- Edit Mode Textarea (Hidden by default) -->
+                    <div id="letterEditMode" class="hidden flex-col gap-3">
+                        <label class="text-xs font-bold text-amber-900 uppercase tracking-wider">Escribe o modifica tu mensaje especial:</label>
+                        <textarea id="letterInput" rows="7" class="w-full p-4 rounded-xl border-2 border-amber-300 bg-white/90 font-handwriting text-2xl text-amber-950 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-inner resize-y"></textarea>
+                        <div class="flex justify-end gap-2">
+                            <button onclick="saveCustomLetter()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1 shadow">
+                                <i data-lucide="check" class="w-4 h-4"></i> Guardar Cambios
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Letter Footer Sign -->
+                    <div class="mt-6 pt-4 border-t border-amber-900/10 flex justify-between items-center text-amber-900/70 text-xs sm:text-sm italic">
+                        <span>Para siempre tuyo ❤️</span>
+                        <span id="letterDate">Primavera 2026</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="relative z-10 text-center py-6 text-amber-800/60 text-xs font-medium">
+        Hecho con ❤️ especialmente para vos • 
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // State Management
+        let currentTab = 'flowers';
+        let flowerAnimationProgress = 0;
+        let animationFrameId = null;
+        let flowerParticles = [];
+
+        // Save & Load Custom Letter in localStorage
+        const defaultLetter = `Mi amor,
+
+Hoy comienza la primavera, pero la verdad es que para mí la primavera empezó el día en que llegaste a mi vida. Trajiste luz, color y una calidez que hace florecer todo a mi alrededor.
+
+Te regalo estas flores amarillas como símbolo de la alegría que me das día a día, del amor bonito que construimos y del brillo tan especial que solo tú tienes. Gracias por ser mi lugar favorito en el mundo.
+
+¡Feliz primavera, mi vida! Te amo infinitamente.`;
+
+        function loadSavedLetter() {
+            const saved = localStorage.getItem('spring_letter_content');
+            const content = saved || defaultLetter;
+            document.getElementById('letterContentText').innerText = content;
+            document.getElementById('letterInput').value = content;
+        }
+
+        function toggleEditLetter() {
+            const viewMode = document.getElementById('letterViewMode');
+            const editMode = document.getElementById('letterEditMode');
+            const btn = document.getElementById('editToggleBtn');
+
+            if (editMode.classList.contains('hidden')) {
+                editMode.classList.remove('hidden');
+                editMode.classList.add('flex');
+                viewMode.classList.add('hidden');
+                btn.innerHTML = `<i data-lucide="x" class="w-3.5 h-3.5"></i> Cancelar`;
+            } else {
+                editMode.classList.add('hidden');
+                editMode.classList.remove('flex');
+                viewMode.classList.remove('hidden');
+                btn.innerHTML = `<i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Personalizar carta`;
+            }
+            lucide.createIcons();
+        }
+
+        function saveCustomLetter() {
+            const newText = document.getElementById('letterInput').value.trim();
+            if (newText) {
+                localStorage.setItem('spring_letter_content', newText);
+                document.getElementById('letterContentText').innerText = newText;
+            }
+            toggleEditLetter();
+            triggerChimeSound();
+        }
+
+        // Tab Switching Logic
+        function switchTab(tab) {
+            currentTab = tab;
+            const secFlowers = document.getElementById('sectionFlowers');
+            const secLetter = document.getElementById('sectionLetter');
+            const btnFlowers = document.getElementById('btnFlowers');
+            const btnLetter = document.getElementById('btnLetter');
+
+            if (tab === 'flowers') {
+                secLetter.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    secLetter.classList.add('hidden');
+                    secLetter.classList.remove('flex');
+                    secFlowers.classList.remove('hidden');
+                    secFlowers.classList.add('flex');
+                    setTimeout(() => {
+                        secFlowers.classList.remove('opacity-0', 'scale-95');
+                        secFlowers.classList.add('opacity-100', 'scale-100');
+                    }, 50);
+                }, 300);
+
+                // Update Buttons Visuals
+                btnFlowers.className = "glow-btn flex-1 min-w-[200px] bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-amber-950 font-semibold px-6 py-4 rounded-2xl shadow-lg transition-all transform hover:-translate-y-1 hover:scale-105 flex items-center justify-center gap-3 border border-amber-300";
+                btnLetter.className = "flex-1 min-w-[200px] bg-white/90 hover:bg-amber-50 text-amber-900 font-semibold px-6 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 hover:scale-105 flex items-center justify-center gap-3 border border-amber-200";
+
+                rebloomBouquet();
+            } else {
+                secFlowers.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    secFlowers.classList.add('hidden');
+                    secFlowers.classList.remove('flex');
+                    secLetter.classList.remove('hidden');
+                    secLetter.classList.add('flex');
+                    setTimeout(() => {
+                        secLetter.classList.remove('opacity-0', 'scale-95');
+                        secLetter.classList.add('opacity-100', 'scale-100');
+                    }, 50);
+                }, 300);
+
+                // Update Buttons Visuals
+                btnLetter.className = "glow-btn flex-1 min-w-[200px] bg-gradient-to-r from-rose-400 via-amber-400 to-yellow-400 text-amber-950 font-semibold px-6 py-4 rounded-2xl shadow-lg transition-all transform hover:-translate-y-1 hover:scale-105 flex items-center justify-center gap-3 border border-amber-300";
+                btnFlowers.className = "flex-1 min-w-[200px] bg-white/90 hover:bg-amber-50 text-amber-900 font-semibold px-6 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 hover:scale-105 flex items-center justify-center gap-3 border border-amber-200";
+
+                triggerChimeSound();
+            }
+        }
+
+        // --- BACKGROUND PETALS ANIMATION ---
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let petals = [];
+
+        function resizeBgCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeBgCanvas);
+        resizeBgCanvas();
+
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * bgCanvas.width;
+                this.y = -20;
+                this.size = Math.random() * 8 + 6;
+                this.speedY = Math.random() * 1.2 + 0.8;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = (Math.random() - 0.5) * 0.02;
+                this.color = Math.random() > 0.3 ? '#FCD34D' : '#F59E0B';
+                this.opacity = Math.random() * 0.6 + 0.3;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y * 0.01) + this.speedX;
+                this.rotation += this.rotSpeed;
+                if (this.y > bgCanvas.height + 20) this.reset();
+            }
+            draw() {
+                bgCtx.save();
+                bgCtx.translate(this.x, this.y);
+                bgCtx.rotate(this.rotation);
+                bgCtx.globalAlpha = this.opacity;
+                bgCtx.fillStyle = this.color;
+                bgCtx.beginPath();
+                bgCtx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+                bgCtx.fill();
+                bgCtx.restore();
+            }
+        }
+
+        for (let i = 0; i < 35; i++) petals.push(new Petal());
+
+        function animateBg() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            petals.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // --- CANVAS BOUQUET DRAWING ENGINE ---
+        const flowerCanvas = document.getElementById('flowerCanvas');
+        const fCtx = flowerCanvas.getContext('2d');
+
+        function setupFlowerCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = flowerCanvas.getBoundingClientRect();
+            flowerCanvas.width = rect.width * dpr;
+            flowerCanvas.height = rect.height * dpr;
+            fCtx.scale(dpr, dpr);
+        }
+
+        // Flower Positions in Bouquet
+        const flowerPositions = [
+            { x: 180, y: 110, size: 38, type: 'sunflower' },
+            { x: 125, y: 140, size: 30, type: 'daisy' },
+            { x: 235, y: 140, size: 30, type: 'daisy' },
+            { x: 150, y: 195, size: 32, type: 'rose' },
+            { x: 210, y: 195, size: 32, type: 'sunflower' },
+            { x: 180, y: 160, size: 35, type: 'sunflower' },
+            { x: 100, y: 185, size: 25, type: 'daisy' },
+            { x: 260, y: 185, size: 25, type: 'daisy' },
+        ];
+
+        function drawStem(startX, startY, endX, endY, progress) {
+            fCtx.save();
+            fCtx.strokeStyle = '#22c55e';
+            fCtx.lineWidth = 5;
+            fCtx.lineCap = 'round';
+            fCtx.beginPath();
+            fCtx.moveTo(startX, startY);
+            
+            const currentX = startX + (endX - startX) * progress;
+            const currentY = startY + (endY - startY) * progress;
+            
+            fCtx.quadraticCurveTo(
+                (startX + endX) / 2 + 10,
+                (startY + endY) / 2,
+                currentX,
+                currentY
+            );
+            fCtx.stroke();
+            fCtx.restore();
+        }
+
+        function drawLeaf(x, y, scale, angle) {
+            fCtx.save();
+            fCtx.translate(x, y);
+            fCtx.rotate(angle);
+            fCtx.scale(scale, scale);
+            fCtx.fillStyle = '#16a34a';
+            fCtx.beginPath();
+            fCtx.ellipse(0, 0, 18, 7, 0, 0, Math.PI * 2);
+            fCtx.fill();
+            fCtx.restore();
+        }
+
+        function drawSunflowerPetal(cx, cy, length, angle, progress) {
+            fCtx.save();
+            fCtx.translate(cx, cy);
+            fCtx.rotate(angle);
+            fCtx.fillStyle = '#fbbf24';
+            fCtx.beginPath();
+            fCtx.moveTo(0, 0);
+            fCtx.quadraticCurveTo(8, length * progress / 2, 0, length * progress);
+            fCtx.quadraticCurveTo(-8, length * progress / 2, 0, 0);
+            fCtx.fill();
+            fCtx.restore();
+        }
+
+        function drawSunflower(x, y, radius, progress) {
+            if (progress <= 0) return;
+            fCtx.save();
+            
+            // Draw Petals
+            const petalCount = 14;
+            for (let i = 0; i < petalCount; i++) {
+                const angle = (i * Math.PI * 2) / petalCount;
+                drawSunflowerPetal(x, y, radius * 1.1, angle, progress);
+            }
+
+            // Center Disc
+            fCtx.fillStyle = '#78350f';
+            fCtx.beginPath();
+            fCtx.arc(x, y, (radius * 0.45) * progress, 0, Math.PI * 2);
+            fCtx.fill();
+
+            // Texture on disc
+            if (progress > 0.8) {
+                fCtx.fillStyle = '#451a03';
+                fCtx.beginPath();
+                fCtx.arc(x, y, (radius * 0.25), 0, Math.PI * 2);
+                fCtx.fill();
+            }
+
+            fCtx.restore();
+        }
+
+        function drawDaisy(x, y, radius, progress) {
+            if (progress <= 0) return;
+            fCtx.save();
+            
+            const petalCount = 12;
+            fCtx.fillStyle = '#fef08a';
+            for (let i = 0; i < petalCount; i++) {
+                const angle = (i * Math.PI * 2) / petalCount;
+                fCtx.save();
+                fCtx.translate(x, y);
+                fCtx.rotate(angle);
+                fCtx.beginPath();
+                fCtx.ellipse(0, (radius * 0.6) * progress, 5 * progress, (radius * 0.5) * progress, 0, 0, Math.PI * 2);
+                fCtx.fill();
+                fCtx.restore();
+            }
+
+            // Center
+            fCtx.fillStyle = '#f59e0b';
+            fCtx.beginPath();
+            fCtx.arc(x, y, (radius * 0.3) * progress, 0, Math.PI * 2);
+            fCtx.fill();
+
+            fCtx.restore();
+        }
+
+        function drawRibbon(progress) {
+            if (progress <= 0) return;
+            const cx = 180;
+            const cy = 265;
+            fCtx.save();
+            fCtx.translate(cx, cy);
+            fCtx.scale(progress, progress);
+
+            // Ribbon Bow
+            fCtx.fillStyle = '#e11d48';
+            
+            // Left Loop
+            fCtx.beginPath();
+            fCtx.ellipse(-20, -5, 22, 12, -Math.PI / 6, 0, Math.PI * 2);
+            fCtx.fill();
+
+            // Right Loop
+            fCtx.beginPath();
+            fCtx.ellipse(20, -5, 22, 12, Math.PI / 6, 0, Math.PI * 2);
+            fCtx.fill();
+
+            // Center Knot
+            fCtx.fillStyle = '#be123c';
+            fCtx.beginPath();
+            fCtx.arc(0, -2, 8, 0, Math.PI * 2);
+            fCtx.fill();
+
+            // Tails
+            fCtx.strokeStyle = '#e11d48';
+            fCtx.lineWidth = 6;
+            fCtx.beginPath();
+            fCtx.moveTo(-4, 4);
+            fCtx.quadraticCurveTo(-15, 25, -22, 40);
+            fCtx.moveTo(4, 4);
+            fCtx.quadraticCurveTo(15, 25, 22, 40);
+            fCtx.stroke();
+
+            fCtx.restore();
+        }
+
+        // Particle Sparkles
+        class SparkleParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 4 + 2;
+                this.vx = (Math.random() - 0.5) * 3;
+                this.vy = (Math.random() - 0.5) * 3 - 1;
+                this.alpha = 1;
+                this.color = ['#fbbf24', '#fef08a', '#ffffff', '#f59e0b'][Math.floor(Math.random() * 4)];
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.02;
+            }
+            draw() {
+                fCtx.save();
+                fCtx.globalAlpha = Math.max(0, this.alpha);
+                fCtx.fillStyle = this.color;
+                fCtx.beginPath();
+                fCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                fCtx.fill();
+                fCtx.restore();
+            }
+        }
+
+        function createSparkles(x, y, count = 12) {
+            for (let i = 0; i < count; i++) {
+                flowerParticles.push(new SparkleParticle(x, y));
+            }
+        }
+
+        function renderBouquet() {
+            const rect = flowerCanvas.getBoundingClientRect();
+            fCtx.clearRect(0, 0, rect.width, rect.height);
+
+            const stemProgress = Math.min(1, flowerAnimationProgress * 1.5);
+            const flowerProgress = Math.max(0, (flowerAnimationProgress - 0.3) / 0.7);
+
+            // 1. Draw Stems
+            flowerPositions.forEach(fp => {
+                drawStem(180, 270, fp.x, fp.y, stemProgress);
+            });
+
+            // 2. Draw Leaves
+            if (stemProgress > 0.4) {
+                const leafProg = (stemProgress - 0.4) / 0.6;
+                drawLeaf(140, 240, leafProg, -Math.PI / 4);
+                drawLeaf(220, 245, leafProg, Math.PI / 4);
+                drawLeaf(160, 220, leafProg, -Math.PI / 6);
+                drawLeaf(200, 225, leafProg, Math.PI / 6);
+            }
+
+            // 3. Draw Ribbon Knot
+            drawRibbon(Math.min(1, flowerAnimationProgress * 1.2));
+
+            // 4. Draw Flowers Blooming
+            flowerPositions.forEach(fp => {
+                if (fp.type === 'sunflower' || fp.type === 'rose') {
+                    drawSunflower(fp.x, fp.y, fp.size, flowerProgress);
+                } else {
+                    drawDaisy(fp.x, fp.y, fp.size, flowerProgress);
+                }
+            });
+
+            // 5. Update and Draw Sparkles
+            flowerParticles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                if (p.alpha <= 0) flowerParticles.splice(index, 1);
+            });
+
+            if (flowerAnimationProgress < 1) {
+                flowerAnimationProgress += 0.015;
+                animationFrameId = requestAnimationFrame(renderBouquet);
+            } else if (flowerParticles.length > 0) {
+                animationFrameId = requestAnimationFrame(renderBouquet);
+            }
+        }
+
+        function rebloomBouquet() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            flowerAnimationProgress = 0;
+            flowerParticles = [];
+            setupFlowerCanvas();
+
+            // Burst initial sparkles at center
+            setTimeout(() => createSparkles(180, 160, 20), 400);
+            renderBouquet();
+            triggerChimeSound();
+        }
+
+        // Interactive Click on Canvas for extra sparkles
+        flowerCanvas.addEventListener('click', (e) => {
+            const rect = flowerCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            createSparkles(x, y, 15);
+            triggerChimeSound();
+            if (!animationFrameId || flowerAnimationProgress >= 1) {
+                renderBouquet();
+            }
+        });
+
+        // --- AUDIO CHIME (Tone.js optional pleasant sound) ---
+        function triggerChimeSound() {
+            try {
+                if (window.Tone) {
+                    const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+                    synth.volume.value = -12;
+                    const now = Tone.now();
+                    synth.triggerAttackRelease(["E5", "G#5", "B5", "E6"], "8n", now);
+                }
+            } catch (e) {
+                // Audio context non-blocking fallback
+            }
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            loadSavedLetter();
+            setupFlowerCanvas();
+            rebloomBouquet();
+        };
+
+        window.addEventListener('resize', () => {
+            setupFlowerCanvas();
+            renderBouquet();
+        });
+    </script>
+</body>
+</html>
